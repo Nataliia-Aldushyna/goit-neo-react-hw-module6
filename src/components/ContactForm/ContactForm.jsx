@@ -3,12 +3,12 @@ import * as Yup from "yup";
 import { nanoid } from "nanoid";
 import { useDispatch, useSelector } from 'react-redux'; 
 import { addContact, selectContacts } from '../../redux/contactsSlice'; 
-import { toast } from 'react-toastify';  // імпортуємо бібліотеку для тостів
+import { toast } from 'react-toastify';  
 import styles from "./ContactForm.module.css";
 
 const ContactForm = () => {
   const dispatch = useDispatch();
-  const contacts = useSelector(selectContacts); // Отримуємо список контактів із Redux
+  const contacts = useSelector(selectContacts); 
 
   const validationSchema = Yup.object({
     name: Yup.string()
@@ -21,7 +21,7 @@ const ContactForm = () => {
   });
 
   const handleSubmit = (values, { resetForm }) => {
-    // Перевірка на дублікати
+   
     const isDuplicate = contacts.some(
       (contact) => 
         contact.name.toLowerCase() === values.name.toLowerCase() || 

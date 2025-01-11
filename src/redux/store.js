@@ -1,13 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { persistStore, persistReducer } from 'redux-persist';
-import storage from 'redux-persist/lib/storage'; // локальне сховище
+import storage from 'redux-persist/lib/storage'; 
 import contactsReducer from './contactsSlice';
 import filtersReducer from './filtersSlice';
 
 const persistConfig = {
-  key: 'contacts', // ключ для збереження в локальному сховищі
+  key: 'contacts', 
   storage,
-  whitelist: ['contacts'], // зберігаємо тільки список контактів
+  whitelist: ['contacts'], 
 };
 
 const persistedContactsReducer = persistReducer(persistConfig, contactsReducer);
@@ -17,12 +17,12 @@ export const store = configureStore({
     contacts: persistedContactsReducer,
     filters: filtersReducer,
   },
-  // Додаємо serializableCheck для ігнорування несеріалізованих значень
+ 
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {
-        ignoredActions: ['persist/PERSIST'], // ігноруємо дію persist
-        ignoredPaths: ['register'], // виключаємо register
+        ignoredActions: ['persist/PERSIST'], 
+        ignoredPaths: ['register'], 
       },
     }),
 });
