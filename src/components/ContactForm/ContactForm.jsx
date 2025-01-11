@@ -1,12 +1,14 @@
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { nanoid } from "nanoid";
-import { useDispatch } from 'react-redux'; 
-import { addContact } from '../../redux/contactsSlice'; 
+import { useDispatch, useSelector } from 'react-redux'; 
+import { addContact, selectContacts } from '../../redux/contactsSlice'; 
+import { toast } from 'react-toastify';  // імпортуємо бібліотеку для тостів
 import styles from "./ContactForm.module.css";
 
 const ContactForm = () => {
-  const dispatch = useDispatch(); 
+  const dispatch = useDispatch();
+  const contacts = useSelector(selectContacts); // Отримуємо список контактів із Redux
 
   const validationSchema = Yup.object({
     name: Yup.string()
@@ -19,12 +21,25 @@ const ContactForm = () => {
   });
 
   const handleSubmit = (values, { resetForm }) => {
+    // Перевірка на дублікати
+    const isDuplicate = contacts.some(
+      (contact) => 
+        contact.name.toLowerCase() === values.name.toLowerCase() || 
+        contact.number === values.number
+    );
+
+    if (isDuplicate) {
+      toast.error(`Contact with name "${values.name}" or number "${values.number}" already exists.`);
+      return;
+    }
+
     const newContact = {
       id: nanoid(),
       name: values.name,
       number: values.number,
     };
-    dispatch(addContact(newContact)); 
+
+    dispatch(addContact(newContact));
     resetForm();
   };
 
